@@ -1,0 +1,3 @@
+[submodule "deps/webrtc-builds"]
+	path = deps/webrtc-builds
+	url = https://github.com/sourcey/webrtc-builds

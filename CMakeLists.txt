@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
 
+if(MSVC)
+    add_compile_options(/W3)
+endif()
+
 project(mediasoupclient LANGUAGES CXX)
 
 # Set version number.
@@ -25,14 +29,14 @@ option(MEDIASOUPCLIENT_LOG_DEV     "Enable MSC_LOG_DEV (See Logger.hpp)" OFF)
 
 # Project configuration.
 set(LIBWEBRTC_INCLUDE_PATH "" CACHE STRING "libwebrtc include path")
-set(LIBWEBRTC_BINARY_PATH "" CACHE STRING "libwebrtc binary path")
+set(LIBWEBRTC_LIB_PATH "" CACHE STRING "libwebrtc binary path")
 
 if(NOT LIBWEBRTC_INCLUDE_PATH)
 	message(FATAL_ERROR "LIBWEBRTC_INCLUDE_PATH not provided")
 endif()
 
-if(NOT LIBWEBRTC_BINARY_PATH)
-	message(FATAL_ERROR "LIBWEBRTC_BINARY_PATH not provided")
+if(NOT LIBWEBRTC_LIB_PATH)
+	message(FATAL_ERROR "LIBWEBRTC_LIB_PATH not provided")
 endif()
 
 message("\n=========== libmediasoupclient Build Configuration ===========\n")
@@ -40,7 +44,7 @@ message(STATUS "MEDIASOUPCLIENT_BUILD_TESTS : " ${MEDIASOUPCLIENT_BUILD_TESTS})
 message(STATUS "MEDIASOUPCLIENT_LOG_TRACE   : " ${MEDIASOUPCLIENT_LOG_TRACE})
 message(STATUS "MEDIASOUPCLIENT_LOG_DEV     : " ${MEDIASOUPCLIENT_LOG_DEV})
 message(STATUS "LIBWEBRTC_INCLUDE_PATH      : " ${LIBWEBRTC_INCLUDE_PATH})
-message(STATUS "LIBWEBRTC_BINARY_PATH       : " ${LIBWEBRTC_BINARY_PATH})
+message(STATUS "LIBWEBRTC_LIB_PATH       : " ${LIBWEBRTC_LIB_PATH})
 message("")
 
 # GCC >= 4.9 is required due to std::regex use.
@@ -92,7 +96,7 @@ set(
 )
 
 # Create target.
-add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
+add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 
 if(${MEDIASOUPCLIENT_LOG_TRACE})
 	target_compile_definitions(${PROJECT_NAME}
@@ -109,13 +113,18 @@ endif()
 # Source Dependencies.
 add_subdirectory(deps/libsdptransform "${CMAKE_CURRENT_BINARY_DIR}/libsdptransform")
 
-# Add some compile flags to our source files.
 if(MSVC)
-	set_source_files_properties(${SOURCE_FILES}
-		PROPERTIES COMPILE_FLAGS "/W3")
+    target_compile_options(sdptransform PRIVATE
+        $<$<CONFIG:Debug>:/MTd>  # use /MTd for Debug
+        $<$<NOT:$<CONFIG:Debug>>:/MT>  # use /MT for non-Debug
+    )
+    target_compile_options(mediasoupclient PRIVATE
+        $<$<CONFIG:Debug>:/MTd>  # use /MTd for Debug
+        $<$<NOT:$<CONFIG:Debug>>:/MT>  # use /MT for non-Debug
+    )
 else()
-	set_source_files_properties(${SOURCE_FILES}
-		PROPERTIES COMPILE_FLAGS -Wall -Wextra -Wpedantic)
+    set_source_files_properties(${SOURCE_FILES}
+    PROPERTIES COMPILE_FLAGS -Wall -Wextra -Wpedantic)
 endif()
 
 # Private (implementation) header files.
@@ -131,7 +140,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 # Public (interface) dependencies.
 target_link_libraries(${PROJECT_NAME} PUBLIC
 	sdptransform
-	${LIBWEBRTC_BINARY_PATH}/libwebrtc${CMAKE_STATIC_LIBRARY_SUFFIX}
+	${PROJECT_SOURCE_DIR}/${LIBWEBRTC_LIB_PATH}
 )
 
 # Compile definitions for libwebrtc.

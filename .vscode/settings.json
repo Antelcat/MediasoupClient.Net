@@ -5,6 +5,11 @@
         "*.wxss": "css",
         "*.wxs": "javascript",
         "*.pyd": "python",
-        "stdatomic.h": "c"
+        "stdatomic.h": "c",
+        "example.h": "c",
+        "*.inc": "c",
+        "peerconnection.hpp": "c",
+        "peer_connection_interface.h": "c",
+        "dataproducer.hpp": "c"
     }
 }

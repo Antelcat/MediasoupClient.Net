@@ -31,7 +31,7 @@ mediasoup client side C# binding based on libmediasoupclient
 
 * build `libmediasoupclient`
   
-  1. Back to the project root directory and configure cmake. set `LIBWEBRTC_BINARY_PATH` to `.\deps\webrtc-builds\out\webrtc-xxxxx-xxxxxxx-win-x64\lib\x64\Release` and set `LIBWEBRTC_INCLUDE_PATH` to `.\deps\webrtc-builds\out\webrtc-xxxxx-xxxxxxx-win-x64\include` for a win-x64 release build.
+  1. Back to the project root directory and configure cmake. set `LIBWEBRTC_LIB_PATH` to `.\deps\webrtc-builds\out\webrtc-xxxxx-xxxxxxx-win-x64\lib\x64\Release\libwebrtc_full.lib` and set `LIBWEBRTC_INCLUDE_PATH` to `.\deps\webrtc-builds\out\webrtc-xxxxx-xxxxxxx-win-x64\include` for a win-x64 release build.
   2. Open the generated `mediasoupclient.sln` in Visual Studio and build `ZERO_CHECK`, `sdptransform` and `mediasoupclient` one by one.
 
   ### Trouble shooting

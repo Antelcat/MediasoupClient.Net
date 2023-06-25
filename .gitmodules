@@ -1,3 +1,6 @@
 [submodule "deps/webrtc-builds"]
 	path = deps/webrtc-builds
 	url = https://github.com/sourcey/webrtc-builds
+[submodule "tools/swig"]
+	path = tools/swig
+	url = https://github.com/DearVa/swig

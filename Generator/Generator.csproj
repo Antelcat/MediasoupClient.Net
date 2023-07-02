@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>MediasoupClient.Net.Generator</AssemblyName>
+        <RootNamespace>MediasoupClient.Net.Generator</RootNamespace>
+        <Configurations>Release;Debug</Configurations>
+        <Platforms>x86;x64</Platforms>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CppSharp" Version="1.0.54.626" />
+      <PackageReference Include="Microsoft.Build" Version="17.6.3" />
+    </ItemGroup>
+
+</Project>
